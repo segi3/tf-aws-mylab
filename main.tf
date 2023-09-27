@@ -171,3 +171,19 @@ resource "aws_instance" "mylab-ansible-managed-node1-server" {
     Name = "mylab-ansible-apache-tomcat-server"
   }
 }
+
+# create ec2 ansible managed node 2 : docker host
+resource "aws_instance" "mylab-docker-host-server" {
+  ami = var.ami-amazon-linux
+  instance_type = var.instance_type
+  key_name = "EC2"
+  vpc_security_group_ids = [ aws_security_group.mylab-security-group.id ]
+  subnet_id = aws_subnet.mylab-subnet-1.id
+  associate_public_ip_address = true
+  user_data = file("./scripts/installDockerHost.sh")
+
+  tags = {
+    Name = "mylab-docker-host-server"
+  }
+}
+

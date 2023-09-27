@@ -5,7 +5,7 @@ default = [ "172.20.0.0/16", "172.20.10.0/24" ]
 
 variable "ami-red-hat" {
   type = string
-  default = "ami-0319ac76374b9fe74"
+  default = "ami-02acda7aaa1f944e5"
 }
 
 variable "ami-ubuntu" {
@@ -15,7 +15,7 @@ variable "ami-ubuntu" {
 
 variable "ami-amazon-linux" {
   type = string
-  default = "ami-064eb0bee0c5402c5"
+  default = "ami-0eeadc4ab092fef70"
 }
 
 variable "instance_type" {

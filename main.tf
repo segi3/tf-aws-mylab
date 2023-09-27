@@ -10,9 +10,8 @@ terraform {
 # configure aws provider
 provider "aws" {
   region = "ap-southeast-1"
-  shared_credentials_file = "C:/Users/Rafi_118407/.aws/credentials"
-  # access_key
-  # secret_key
+  # shared_credentials_file = "C:/Users/Rafi_118407/.aws/credentials"
+  
 }
 
 # create vpc
@@ -55,6 +54,26 @@ resource "aws_security_group" "mylab-security-group" {
     ipv6_cidr_blocks = ["::/0"]
     from_port = 22
     to_port = 22
+    protocol = "tcp"
+    prefix_list_ids = []
+    security_groups = []
+    self = false
+  }, {
+    description = "WEB"
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    prefix_list_ids = []
+    security_groups = []
+    self = false
+  }, {
+    description = "SSL"
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    from_port = 443
+    to_port = 443
     protocol = "tcp"
     prefix_list_ids = []
     security_groups = []
@@ -109,17 +128,32 @@ resource "aws_route_table_association" "mylab-route-table-association" {
   route_table_id = aws_route_table.mylab-route-table.id
 }
 
-# create ec2
+# create ec2 jenkins
 resource "aws_instance" "mylab-jenkins-server" {
-  ami = var.ami-red-hat
+  ami = var.ami-amazon-linux
   instance_type = var.instance_type
-  key_name = "mylab-key"
+  key_name = "EC2"
   vpc_security_group_ids = [ aws_security_group.mylab-security-group.id ]
   subnet_id = aws_subnet.mylab-subnet-1.id
   associate_public_ip_address = true
-  user_data = file("./scripts/installJenkins.sh")
+  user_data = file("./scripts/newInstallJenkins.sh")
 
   tags = {
     Name = "mylab-jenkins-server"
+  }
+}
+
+# create ec2 ansible control
+resource "aws_instance" "mylab-ansible-control-server" {
+  ami = var.ami-amazon-linux
+  instance_type = var.instance_type
+  key_name = "EC2"
+  vpc_security_group_ids = [ aws_security_group.mylab-security-group.id ]
+  subnet_id = aws_subnet.mylab-subnet-1.id
+  associate_public_ip_address = true
+  user_data = file("./scripts/installAnsibleControlNode.sh")
+
+  tags = {
+    Name = "mylab-ansible-control-server"
   }
 }

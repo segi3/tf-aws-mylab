@@ -22,3 +22,13 @@ variable "instance_type" {
   type = string
   default = "t2.micro"
 }
+
+variable "instance_type_jenkins" {
+  type = string
+  default = "t2.medium"
+}
+
+variable "instance_type_nexus" {
+  type = string
+  default = "t2.medium"
+}

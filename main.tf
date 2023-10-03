@@ -150,7 +150,7 @@ resource "aws_route_table_association" "mylab-route-table-association" {
 # create ec2 jenkins
 resource "aws_instance" "mylab-jenkins-server" {
   ami = var.ami-amazon-linux
-  instance_type = var.instance_type
+  instance_type = var.instance_type_jenkins
   key_name = "EC2"
   vpc_security_group_ids = [ aws_security_group.mylab-security-group.id ]
   subnet_id = aws_subnet.mylab-subnet-1.id

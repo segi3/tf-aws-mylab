@@ -87,6 +87,26 @@ resource "aws_security_group" "mylab-security-group" {
     prefix_list_ids = []
     security_groups = []
     self = false
+  }, {
+    description = "JENKINS ALTERNATE PORT"
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    from_port = 9091
+    to_port = 9091
+    protocol = "tcp"
+    prefix_list_ids = []
+    security_groups = []
+    self = false
+  }, {
+    description = "SONATYPE NEXUS"
+    cidr_blocks = ["0.0.0.0/0"]
+    ipv6_cidr_blocks = []
+    from_port = 8081
+    to_port = 8081
+    protocol = "tcp"
+    prefix_list_ids = []
+    security_groups = []
+    self = false
   } ]
 
   egress = [ {
@@ -187,3 +207,17 @@ resource "aws_instance" "mylab-docker-host-server" {
   }
 }
 
+# create ec2 sonatype nexus
+resource "aws_instance" "mylab-sonatype-nexus-server" {
+  ami = var.ami-amazon-linux
+  instance_type = var.instance_type_nexus
+  key_name = "EC2"
+  vpc_security_group_ids = [ aws_security_group.mylab-security-group.id ]
+  subnet_id = aws_subnet.mylab-subnet-1.id
+  associate_public_ip_address = true
+  user_data = file("./scripts/installSonatypeNexus.sh")
+
+  tags = {
+    Name = "mylab-sonatype-nexus-server"
+  }
+}

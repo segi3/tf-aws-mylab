@@ -4,8 +4,9 @@
 sudo yum update -y
 sudo yum install wget -y
 
-# install java
-sudo dnf install java-11-amazon-corretto -y
+# install java 17
+# sudo dnf install java-11-amazon-corretto -y
+sudo yum install java-17-amazon-corretto-devel -y
 
 # download jenkins
 sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
